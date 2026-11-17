@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>약국 카드단말기 놀이</title>
+<style>
+:root{--bg:#f4f7fb;--fg:#1b2430;--card:#fff;--line:#d8e0ea;--pri:#2a7de1;--ok:#1fa34a;--bad:#d64545;--mut:#5b6877;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#10161e;--fg:#eef2f7;--card:#1b2531;--line:#2f3c4c;--pri:#5aa2ff;--ok:#3ccf6c;--bad:#ff7070;--mut:#9aa8b8}}
+*{box-sizing:inherit}html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;font-size:20px;-webkit-tap-highlight-color:transparent}
+body{min-height:100%;padding:0 14px 28px;max-width:640px;margin:0 auto}
+button{font:inherit;color:inherit;border:0;border-radius:18px;padding:14px 18px;background:var(--card);border:2px solid var(--line);min-height:56px;cursor:pointer}
+button:active{transform:scale(.97)}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 0;font-size:15px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.bar button{min-height:44px;padding:8px 12px;font-size:15px;border-radius:12px}
+.st{color:var(--mut)}.st b{color:var(--ok)}
+.hint{font-size:14px;color:var(--mut);margin:0 0 8px}
+h1{font-size:28px;margin:8px 0}h2{font-size:22px;margin:16px 0 8px}
+.big{font-size:48px;font-weight:800;text-align:center;margin:8px 0}
+.roles{display:grid;gap:14px;margin-top:14px}
+.roles button{font-size:26px;min-height:110px;font-weight:700}
+.rA{background:#e0f0ff!important;color:#0b3d75}.rB{background:#ffe9d6!important;color:#7a3b00}
+input{font:inherit;font-size:26px;width:100%;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--fg);text-align:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.p{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 8px;position:relative}
+.p .e{font-size:64px;line-height:1.1}.p .n{font-weight:700}.p .pr{color:var(--pri);font-weight:700}
+.badge{position:absolute;top:6px;right:8px;background:var(--bad);color:#fff;border-radius:99px;min-width:34px;height:34px;display:none;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row .t{flex:1}.row button{min-height:44px;min-width:44px;padding:4px 10px}
+.prim{background:var(--pri);color:#fff;border-color:transparent;font-weight:800;font-size:24px;width:100%;margin-top:12px}
+.dng{background:var(--bad);color:#fff;border-color:transparent}
+.okb{background:var(--ok);color:#fff;border-color:transparent;font-weight:800;font-size:24px;width:100%;margin-top:12px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.pad button{font-size:30px;min-height:68px;font-weight:700}
+.disp{font-size:44px;font-weight:800;text-align:center;padding:10px;background:var(--card);border-radius:16px;border:2px solid var(--line)}
+.pay{display:grid;gap:12px;margin-top:12px}.pay button{font-size:28px;min-height:96px;font-weight:800;color:#fff;border:0}
+.m1{background:#2a7de1}.m2{background:#111;border:2px solid #666}.m3{background:#1428a0}
+.full{text-align:center;padding:30px 10px}.full .e{font-size:120px}.full .tx{font-size:30px;font-weight:800;margin-top:10px}
+.sum{background:var(--card);border-radius:14px;padding:10px 14px;margin:8px 0;font-size:17px}
+.ed{display:grid;grid-template-columns:70px 1fr 100px 44px;gap:6px;margin-bottom:8px}.ed input{font-size:18px;padding:8px}
+.note{font-size:14px;color:var(--mut);text-align:center;margin-top:10px}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff4e0;--fg:#4a3b32;--card:#fff;--line:#ffd9a8;--pri:#ff7a59;--ok:#2fbf71;--bad:#ff5d73;--mut:#9a8272;--dot:#ffe3b8}
+@media(prefers-color-scheme:dark){:root{--bg:#2a2040;--fg:#fff3e6;--card:#3b2f5a;--line:#5b4a85;--pri:#ff9a7a;--ok:#5be39a;--bad:#ff7b8f;--mut:#c4b5e0;--dot:#352a52}}
+html,body{font-family:'Jua','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;font-size:21px;background-color:var(--bg);background-image:radial-gradient(var(--dot) 3px,transparent 3.5px);background-size:28px 28px}
+button{border-radius:26px;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.bar{background:transparent;backdrop-filter:blur(6px)}
+.bar button{border-radius:99px;box-shadow:0 3px 0 var(--line)}
+h1{text-align:center;font-size:32px}h2{font-size:24px}
+.awn{height:34px;margin:6px -4px 0;border-radius:18px 18px 4px 4px;background:repeating-linear-gradient(90deg,#ff7a8a 0 36px,#fff 36px 72px);box-shadow:0 5px 0 #e45a6c}
+.sname{font-family:inherit;font-size:30px;margin:10px 0 14px;background:var(--card);border:3px dashed var(--pri);border-radius:22px;color:var(--fg)}
+.grid{gap:14px}
+.p{border-radius:30px;border:0;box-shadow:0 7px 0 rgba(0,0,0,.14);color:#4a3b32}
+.p:active{box-shadow:0 2px 0 rgba(0,0,0,.14)}
+.p .e{font-size:76px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.1))}.p .n{font-size:22px}.p .pr{color:#d6452b;font-size:22px}
+.grid .p:nth-child(6n+1){background:#ffd6e0}.grid .p:nth-child(6n+2){background:#d4ecff}.grid .p:nth-child(6n+3){background:#fff2b8}.grid .p:nth-child(6n+4){background:#d6f5df}.grid .p:nth-child(6n+5){background:#e6dcff}.grid .p:nth-child(6n+6){background:#ffe2c7}
+.badge{background:#ff5d73;border:3px solid #fff;width:40px;height:40px;font-size:22px;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.row{background:var(--card);border-radius:20px;padding:8px 12px;margin-bottom:8px;border:0}
+.row button{border-radius:99px;font-size:24px;width:50px;height:50px;padding:0}
+.big{color:var(--pri);text-shadow:0 3px 0 rgba(0,0,0,.08)}
+.prim{background:var(--pri);box-shadow:0 7px 0 #d9583b;border-color:transparent;font-size:28px;min-height:72px}
+.okb{box-shadow:0 7px 0 #1d8f52;font-size:28px;min-height:72px}
+.dng{box-shadow:0 5px 0 #d13a50}
+.pad button{border-radius:24px;font-size:34px;min-height:76px}
+.pad button:nth-child(3n+1){background:#ffd6e0}.pad button:nth-child(3n+2){background:#d4ecff}.pad button:nth-child(3n){background:#fff2b8}.pad button{color:#4a3b32}
+.disp{border-radius:26px;border:3px dashed var(--pri);font-size:48px}
+.full .e{font-size:140px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-12px) scale(1.05)}}
+.full .tx{font-size:34px}
+.term{background:var(--card);border-radius:36px;padding:14px;border:4px solid var(--line);box-shadow:0 8px 0 var(--line);margin-top:8px}
+.pay button{border-radius:30px;min-height:104px;font-size:32px;box-shadow:0 7px 0 rgba(0,0,0,.3)}
+.m1{background:linear-gradient(135deg,#4aa8ff,#2a7de1)}.m2{background:linear-gradient(135deg,#444,#111)}.m3{background:linear-gradient(135deg,#4d63e0,#1428a0)}
+.sum{border-radius:20px;border:2px dashed var(--line)}
+.roles button{border-radius:36px;font-size:30px;min-height:130px;border:0;box-shadow:0 8px 0 rgba(0,0,0,.15)}
+.rA{background:linear-gradient(135deg,#bfe3ff,#8cc8ff)!important}.rB{background:linear-gradient(135deg,#ffd9b8,#ffb98a)!important}
+input{border-radius:22px;border:3px solid var(--line)}
+</style></head><body>
+<div class="bar"><span class="st" id="st"></span><span><button id="fs">⛶ 전체화면</button> <button id="rb">🔄 역할 바꾸기</button></span></div>
+<div id="fsn" class="hint" style="display:none">전체화면이 안 되는 기기예요. 공유 버튼에서 "홈 화면에 추가"를 눌러 주세요.</div>
+<div id="app"></div>
+<script>
+const DEF=[["💊","해열시트",3000],["🧴","알레르기약",2500],["🩹","캐릭터 밴드",1500],["😷","마스크",1000],["🍊","비타민",12000],["🧪","연고",4000]];
+const mk=()=>({ts:0,shop:"놀이 약국",items:DEF.map(x=>x.slice()),cart:{},custom:[],stat:"idle",method:"",total:0,rcpt:[]});
+let S=mk(),role=null,roomCode="",room=null,online=false,view="main",kp=null,kpFor="",ed=null,pend=null;
+const $=s=>document.querySelector(s),W=n=>n.toLocaleString("ko-KR")+"원";
+const ls={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+role=ls.g("role");roomCode=ls.g("room")||"";
+try{const l=ls.g("S");if(l)S=Object.assign(mk(),JSON.parse(l))}catch(e){}
+const sum=()=>Object.entries(S.cart).reduce((a,[i,q])=>a+(S.items[i]?S.items[i][2]*q:0),0)+S.custom.reduce((a,b)=>a+b,0);
+const lines=()=>Object.entries(S.cart).filter(([i,q])=>q>0&&S.items[i]).map(([i,q])=>[S.items[i][0],S.items[i][1],q,S.items[i][2]]).concat(S.custom.map(c=>["🔢","직접 입력",1,c]));
+function push(){S.ts=Date.now();ls.s("S",JSON.stringify(S));if(room){try{room.presence({s:S})}catch(e){}}}
+function editing(){return view==="edit"||kp!==null||(document.activeElement&&document.activeElement.id==="sn")}
+function pull(){if(!room)return;let best=null;try{for(const p of room.peers()){if(p.isMe)continue;const s=p.presence&&p.presence.s;if(s&&s.ts>S.ts&&(!best||s.ts>best.ts))best=s}}catch(e){}
+ const c=room.connected();if(c!==online){online=c;head()}
+ if(best&&!editing()){S=Object.assign(mk(),best);ls.s("S",JSON.stringify(S));draw()}}
+async function connect(){room=null;online=false;if(!/^\d{4}$/.test(roomCode)){head();return}
+ try{const r=await claude.use("room");if(!r){head();return}room=await r.join("r"+roomCode);online=room.connected();room.presence({s:S});room.onConnection(c=>{online=c;head()})}catch(e){room=null}head()}
+setInterval(pull,1000);
+function head(){$("#st").innerHTML=role?(online?`<b>● 두 기기 연결됨 · 방 ${roomCode}</b>`:"○ 이 기기에서만 작동"):"";$("#rb").style.display=role?"":"none"}
+const fsOK=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;
+$("#fs").onclick=()=>{if(fsOK){(document.fullscreenElement?document.exitFullscreen():(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).call(document.documentElement)).catch?.(()=>{})}else $("#fsn").style.display="block"};
+if(!fsOK)$("#fsn").style.display="block";
+$("#rb").onclick=()=>{role=null;ls.s("role","");view="main";kp=null;draw()};
+function setRole(r){const v=$("#room").value.trim();if(v&&!/^\d{4}$/.test(v)){$("#rerr").textContent="방 번호는 숫자 4자리예요";return}roomCode=v;ls.s("room",v);role=r;ls.s("role",r);connect();draw()}
+function keypad(onOk,onCancel,title){return `<h2>${title}</h2><div class="disp" id="kd">${W(+kp||0)}</div><div class="pad">${[1,2,3,4,5,6,7,8,9,"00",0,"⌫"].map(k=>`<button data-k="${k}">${k}</button>`).join("")}</div><button class="okb" id="kok">확인</button><button style="width:100%;margin-top:10px" id="kcx">취소</button>`}
+function bindKp(ok,cancel){document.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{let k=b.dataset.k,v=kp||"";if(k==="⌫")v=v.slice(0,-1);else if((v+k).length<=7)v+=k;kp=v.replace(/^0+/,"");$("#kd").textContent=W(+kp||0)});$("#kok").onclick=()=>{const n=+kp;kp=null;if(n>0)ok(n);else cancel()};$("#kcx").onclick=()=>{kp=null;cancel()}}
+function draw(){head();const a=$("#app");
+ if(!role){a.innerHTML=`<h1>💊 약국 놀이</h1><p class="hint">이 기기의 역할을 골라 주세요. (실제 결제는 일어나지 않아요)</p><div class="roles"><button class="rA" data-r="A">💊 상품 선택(약사)</button><button class="rB" data-r="B">💳 결제 단말기(손님)</button></div><h2>방 번호 (숫자 4자리)</h2><input id="room" inputmode="numeric" maxlength="4" placeholder="비워도 돼요" value="${roomCode}"><p class="hint">같은 방 번호를 넣은 기기끼리 연결돼요.</p><div id="rerr" style="color:var(--bad)"></div>`;a.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>setRole(b.dataset.r));return}
+ role==="A"?drawA(a):drawB(a)}
+function drawA(a){
+ if(view==="edit")return drawEdit(a);
+ if(kp!==null&&kpFor==="A"){a.innerHTML=keypad(0,0,"🔢 금액 직접 입력");bindKp(n=>{S.custom.push(n);push();view="main";draw()},()=>draw());return}
+ if(S.stat==="paying"){a.innerHTML=`<div class="full"><div class="e">💳</div><div class="tx">손님 단말기에서 결제 중…</div><div class="big">${W(S.total)}</div></div><button class="dng" style="width:100%" id="cx">결제 취소</button>`;$("#cx").onclick=()=>{S.stat="idle";push();draw()};return}
+ if(S.stat==="done"){a.innerHTML=`<div class="full"><div class="e">✅</div><div class="tx">결제 완료</div><div class="big">${W(S.total)}</div><div class="tx">${S.method}</div></div><button class="okb" id="nw">새 주문 받기</button>`;$("#nw").onclick=()=>{const k=mk();k.shop=S.shop;k.items=S.items;S=k;push();draw()};return}
+ const q=i=>S.cart[i]||0,L=lines(),t=sum();
+ a.innerHTML=`<div class="awn"></div><input class="sname" id="sn" maxlength="14" value="${esc(S.shop)}" placeholder="✏️ 약국 이름을 적어요" style="text-align:center"><div class="grid">${S.items.map((it,i)=>`<button class="p" data-i="${i}"><span class="badge" style="display:${q(i)?"flex":"none"}">${q(i)}</span><span class="e">${esc(it[0])}</span><span class="n">${esc(it[1])}</span><span class="pr">${W(it[2])}</span></button>`).join("")}</div>
+ <div style="display:flex;gap:8px;margin-top:12px"><button style="flex:1" id="kb">🔢 금액 직접 입력</button><button style="flex:1" id="eb">✏️ 상품 편집</button></div>
+ <h2>🛒 담은 목록</h2>${L.length?"":'<p class="hint">상품을 눌러 담아 보세요</p>'}
+ ${Object.keys(S.cart).filter(i=>q(i)>0&&S.items[i]).map(i=>`<div class="row"><span class="t">${esc(S.items[i][0])} ${esc(S.items[i][1])}</span><button data-m="${i}">−</button><b>${q(i)}</b><button data-a="${i}">＋</button></div>`).join("")}
+ ${S.custom.map((c,j)=>`<div class="row"><span class="t">🔢 직접 입력 ${W(c)}</span><button data-x="${j}">✕</button></div>`).join("")}
+ <div class="big">합계 ${W(t)}</div>
+ <button class="prim" id="rq" ${t?"":"disabled style='opacity:.4'"}>💳 결제 요청</button>
+ <button style="width:100%;margin-top:10px" id="cl">🗑️ 비우기</button>`;
+ a.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const i=b.dataset.i;S.cart[i]=q(i)+1;push();draw()});
+ a.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{S.cart[b.dataset.a]=q(b.dataset.a)+1;push();draw()});
+ a.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{S.cart[b.dataset.m]=Math.max(0,q(b.dataset.m)-1);push();draw()});
+ a.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{S.custom.splice(+b.dataset.x,1);push();draw()});
+ $("#sn").onchange=e=>{S.shop=e.target.value.trim()||"놀이 약국";push();draw()};
+ $("#kb").onclick=()=>{kp="";kpFor="A";draw()};
+ $("#eb").onclick=()=>{ed={shop:S.shop,items:S.items.map(x=>x.slice())};view="edit";draw()};
+ $("#cl").onclick=()=>{S.cart={};S.custom=[];push();draw()};
+ $("#rq").onclick=()=>{if(!t)return;S.stat="paying";S.total=t;S.rcpt=lines();S.method="";push();draw()};
+}
+function drawEdit(a){
+ a.innerHTML=`<h1>✏️ 상품 편집</h1><h2>약국 이름</h2><input id="es" style="font-size:20px" value="${esc(ed.shop)}"><h2>상품</h2>${ed.items.map((it,i)=>`<div class="ed"><input data-f="0,${i}" value="${esc(it[0])}"><input data-f="1,${i}" value="${esc(it[1])}"><input data-f="2,${i}" inputmode="numeric" value="${it[2]}"><button data-d="${i}">🗑️</button></div>`).join("")}
+ <button style="width:100%" id="ad">＋ 상품 추가</button><button class="okb" id="sv">저장</button><button style="width:100%;margin-top:10px" id="cc">취소</button>`;
+ const rd=()=>{ed.shop=$("#es").value;a.querySelectorAll("[data-f]").forEach(x=>{const[c,i]=x.dataset.f.split(",");ed.items[i][c]=c==="2"?(parseInt(x.value.replace(/\D/g,""))||0):x.value})};
+ a.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{rd();ed.items.splice(+b.dataset.d,1);drawEdit(a)});
+ $("#ad").onclick=()=>{rd();ed.items.push(["🆕","새 상품",1000]);drawEdit(a)};
+ $("#sv").onclick=()=>{rd();S.shop=ed.shop||"놀이 약국";S.items=ed.items.slice(0,20);S.cart={};push();view="main";draw()};
+ $("#cc").onclick=()=>{view="main";draw()}}
+function drawB(a){
+ if(kp!==null&&kpFor==="B"){a.innerHTML=keypad(0,0,"🔢 결제할 금액");bindKp(n=>{S.stat="paying";S.total=n;S.custom=[n];S.cart={};S.rcpt=[["🔢","직접 입력",1,n]];S.method="";push();draw()},()=>draw());return}
+ if(pend){const m=pend;a.innerHTML=`<div class="full"><div class="e">${m.e}</div><div class="tx">${m.t}</div></div>`;return}
+ if(S.stat==="paying"){a.innerHTML=`<h1>${esc(S.shop)}</h1><div class="big">${W(S.total)}</div><div class="sum">${(S.rcpt||[]).map(r=>`${esc(r[0])} ${esc(r[1])} × ${r[2]}`).join("<br>")}</div><div class="pay"><button class="m1" data-p="0">💳 카드</button><button class="m2" data-p="1">🍎 Apple Pay</button><button class="m3" data-p="2">📱 삼성페이</button></div>`;
+  const M=[{e:"💳",t:"카드를 꽂아 주세요",n:"💳 카드"},{e:"🍎📱",t:"아이폰을 가까이 대 주세요",n:"🍎 Apple Pay"},{e:"📱",t:"갤럭시를 가까이 대 주세요",n:"📱 삼성페이"}];
+  a.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const m=M[+b.dataset.p];pend=m;draw();setTimeout(()=>{pend=null;S.stat="done";S.method=m.n;push();draw()},1700)});return}
+ if(S.stat==="done"){a.innerHTML=`<div class="full"><div class="e">✅</div><div class="tx">승인 완료</div><div class="big">${W(S.total)}</div><div class="tx">${S.method}</div></div><button class="okb" id="ok">확인</button>`;$("#ok").onclick=()=>{const k=mk();k.shop=S.shop;k.items=S.items;S=k;push();draw()};return}
+ a.innerHTML=`<div class="awn"></div><h1>${esc(S.shop)}</h1><div class="term"><div class="full"><div class="e">💳</div><div class="tx">결제 대기 중…</div></div></div><button class="prim" id="kb">🔢 금액 직접 입력해서 결제</button>`;$("#kb").onclick=()=>{kp="";kpFor="B";draw()}}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+draw();connect();
+</script></body></html>
